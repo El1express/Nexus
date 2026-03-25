@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Nexus — Business Intelligence AI</title>
+
+<!-- PWA Core -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#0a0a0a"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Nexus"/>
+
+<!-- Icons -->
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png"/>
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png"/>
+
+<!-- Apple Splash Screens -->
+<link rel="apple-touch-startup-image" href="icons/icon-512x512.png"/>
+
+<!-- SEO & Social -->
+<meta name="description" content="Nexus — Your personal CEO assistant. Business strategy, legal, finance, writing, and deep analysis with document intelligence."/>
+<meta name="keywords" content="business AI, CEO assistant, strategy, legal, finance, document analysis"/>
+<meta property="og:title" content="Nexus — Business Intelligence AI"/>
+<meta property="og:description" content="Your personal CEO assistant for business, legal, math, writing and strategy."/>
+<meta property="og:type" content="website"/>
+
+<!-- Safe area for notch/island -->
+<style>
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  #sidebar { padding-top: env(safe-area-inset-top); }
+  #input-area { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f7f3ec;
+  --bg1:#f0ebe0;
+  --bg2:#e8e1d4;
+  --bg3:#ddd5c5;
+  --ink:#0d0d0d;
+  --ink2:#1e1e1e;
+  --ink3:#4a4a4a;
+  --ink4:#7a7a7a;
+  --ink5:#b0a898;
+  --ink6:#d4cec4;
+  --white:#fdfaf5;
+  --black:#0a0a0a;
+  --gold:#9a7c3a;
+  --gold2:#c4a052;
+  --gold3:rgba(154,124,58,0.12);
+  --gold4:rgba(154,124,58,0.06);
+  --border:rgba(13,13,13,0.08);
+  --border2:rgba(13,13,13,0.14);
+  --border3:rgba(13,13,13,0.22);
+  --shadow:0 1px 12px rgba(13,13,13,0.06),0 4px 24px rgba(13,13,13,0.04);
+  --shadow2:0 4px 32px rgba(13,13,13,0.1),0 12px 48px rgba(13,13,13,0.06);
+  --shadow3:0 8px 60px rgba(13,13,13,0.14);
+  --fh:'Cormorant Garamond',serif;
+  --fb:'Outfit',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+  --sidebar:268px;
+  --topbar:58px;
+}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--fb);overflow:hidden;-webkit-font-smoothing:antialiased;}
+
+/* ════════ LAYOUT ════════ */
+#app{display:flex;height:100vh;width:100vw;position:relative;}
+
+/* ════════ SIDEBAR ════════ */
+#sidebar{
+  width:var(--sidebar);min-width:var(--sidebar);
+  height:100vh;background:var(--black);
+  display:flex;flex-direction:column;overflow:hidden;
+  position:relative;z-index:20;
+}
+#sidebar::after{
+  content:'';position:absolute;top:0;right:0;width:1px;height:100%;
+  background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.06) 20%,rgba(255,255,255,0.06) 80%,transparent);
+}
+
+/* Logo */
+.sb-logo{
+  padding:24px 20px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;
+}
+.sb-logo-row{display:flex;align-items:center;gap:11px;margin-bottom:2px;}
+.sb-gem{
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(145deg,#f7f3ec,#c4a052);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;position:relative;overflow:hidden;
+}
+.sb-gem::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.3),transparent);
+}
+.sb-gem-inner{position:relative;z-index:1;font-weight:700;font-family:var(--fh);color:#0d0d0d;font-size:17px;letter-spacing:-1px;}
+.sb-name{font-family:var(--fh);font-size:21px;font-weight:600;color:#f7f3ec;letter-spacing:0.5px;}
+.sb-tagline{font-size:9px;color:rgba(247,243,236,0.28);letter-spacing:3px;font-family:var(--fm);padding-left:47px;margin-top:1px;}
+
+/* Modes */
+.sb-modes{padding:14px 14px 8px;}
+.sb-mode-btn{
+  width:100%;padding:9px 14px;border-radius:8px;
+  border:1px solid transparent;background:transparent;
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+  transition:all 0.18s;margin-bottom:3px;text-align:left;
+}
+.sb-mode-btn:hover{background:rgba(255,255,255,0.05);}
+.sb-mode-btn.active{background:rgba(247,243,236,0.07);border-color:rgba(247,243,236,0.1);}
+.sb-mode-icon{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.sb-mode-label{flex:1;}
+.sb-mode-name{font-size:12px;font-weight:500;color:rgba(247,243,236,0.85);font-family:var(--fb);line-height:1;}
+.sb-mode-desc{font-size:10px;color:rgba(247,243,236,0.3);margin-top:2px;font-family:var(--fb);}
+.sb-mode-badge{
+  font-size:9px;font-family:var(--fm);padding:2px 7px;border-radius:4px;
+  background:rgba(255,255,255,0.06);color:rgba(247,243,236,0.4);
+}
+
+/* Mode colors */
+.m-business .sb-mode-icon{background:rgba(154,124,58,0.15);color:#c4a052;}
+.m-business.active .sb-mode-icon{background:rgba(154,124,58,0.25);}
+.m-legal .sb-mode-icon{background:rgba(99,102,241,0.15);color:#818cf8;}
+.m-legal.active .sb-mode-icon{background:rgba(99,102,241,0.2);}
+.m-math .sb-mode-icon{background:rgba(16,185,129,0.12);color:#34d399;}
+.m-math.active .sb-mode-icon{background:rgba(16,185,129,0.18);}
+.m-literature .sb-mode-icon{background:rgba(239,68,68,0.12);color:#f87171;}
+.m-literature.active .sb-mode-icon{background:rgba(239,68,68,0.18);}
+.m-strategy .sb-mode-icon{background:rgba(14,165,233,0.12);color:#38bdf8;}
+.m-strategy.active .sb-mode-icon{background:rgba(14,165,233,0.18);}
+.m-auto .sb-mode-icon{background:rgba(247,243,236,0.08);color:rgba(247,243,236,0.6);}
+.m-auto.active .sb-mode-icon{background:rgba(247,243,236,0.12);}
+
+/* New chat */
+.sb-new{
+  margin:0 14px 4px;padding:10px 14px;
+  background:rgba(247,243,236,0.06);
+  border:1px solid rgba(247,243,236,0.1);
+  border-radius:9px;color:rgba(247,243,236,0.75);
+  font-family:var(--fb);font-size:12px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;gap:9px;
+  transition:all 0.18s;
+}
+.sb-new:hover{background:rgba(247,243,236,0.1);border-color:rgba(247,243,236,0.18);}
+.sb-new-icon{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--gold3);border:1px solid rgba(154,124,58,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--gold2);
+}
+
+.sb-label{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.2);font-family:var(--fm);padding:14px 20px 7px;text-transform:uppercase;}
+
+/* Convo list */
+#convo-list{flex:1;overflow-y:auto;padding:2px 0;}
+#convo-list::-webkit-scrollbar{width:2px;}
+#convo-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
+.ci{
+  padding:9px 20px;cursor:pointer;
+  border-radius:7px;margin:2px 10px;
+  border:1px solid transparent;transition:all 0.14s;
+}
+.ci:hover{background:rgba(247,243,236,0.04);border-color:rgba(255,255,255,0.06);}
+.ci.active{background:rgba(154,124,58,0.1);border-color:rgba(154,124,58,0.22);}
+.ci-title{font-size:12px;color:rgba(247,243,236,0.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fb);margin-bottom:3px;}
+.ci-meta{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(247,243,236,0.28);font-family:var(--fm);}
+.ci-mode-dot{width:5px;height:5px;border-radius:50%;}
+
+/* Files panel */
+.sb-files{
+  border-top:1px solid rgba(255,255,255,0.05);
+  padding:14px;flex-shrink:0;
+}
+.sb-files-head{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.2);
+  font-family:var(--fm);margin-bottom:10px;
+}
+.sb-files-count{
+  background:rgba(154,124,58,0.2);color:var(--gold2);
+  padding:1px 7px;border-radius:4px;font-size:9px;
+}
+.drop-zone{
+  border:1px dashed rgba(247,243,236,0.14);border-radius:9px;
+  padding:12px;text-align:center;cursor:pointer;transition:all 0.2s;
+  background:rgba(247,243,236,0.02);position:relative;
+}
+.drop-zone:hover,.drop-zone.drag{border-color:rgba(154,124,58,0.5);background:rgba(154,124,58,0.04);}
+.drop-zone input{display:none;}
+.drop-icon{font-size:18px;margin-bottom:4px;opacity:0.4;}
+.drop-text{font-size:10px;color:rgba(247,243,236,0.35);line-height:1.5;}
+.drop-text span{color:rgba(196,160,82,0.8);}
+#file-list{margin-top:8px;display:flex;flex-direction:column;gap:3px;max-height:120px;overflow-y:auto;}
+#file-list::-webkit-scrollbar{width:2px;}
+#file-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
+.fi{
+  display:flex;align-items:center;gap:7px;padding:7px 9px;
+  background:rgba(247,243,236,0.04);border:1px solid rgba(255,255,255,0.05);
+  border-radius:7px;cursor:pointer;transition:all 0.14s;
+}
+.fi:hover{background:rgba(154,124,58,0.08);border-color:rgba(154,124,58,0.25);}
+.fi.on{background:rgba(154,124,58,0.12);border-color:rgba(154,124,58,0.3);}
+.fi-ico{font-size:13px;flex-shrink:0;}
+.fi-info{flex:1;min-width:0;}
+.fi-name{font-size:11px;color:rgba(247,243,236,0.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fi-sz{font-size:9px;color:rgba(247,243,236,0.28);font-family:var(--fm);}
+.fi-del{font-size:11px;color:rgba(247,243,236,0.18);padding:2px 4px;flex-shrink:0;transition:color 0.15s;}
+.fi-del:hover{color:rgba(239,68,68,0.7);}
+
+/* ════════ MAIN ════════ */
+#main{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;background:var(--bg);position:relative;}
+
+/* Topbar */
+#topbar{
+  height:var(--topbar);min-height:var(--topbar);
+  background:rgba(253,250,245,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 24px;gap:14px;
+  position:relative;z-index:10;
+  box-shadow:0 1px 0 var(--border);
+}
+.tb-title{font-family:var(--fh);font-size:17px;font-weight:600;color:var(--ink);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-sub{font-family:var(--fb);font-weight:400;font-size:12px;color:var(--ink4);margin-left:8px;}
+
+.ctx-pill{
+  display:flex;align-items:center;gap:6px;padding:5px 13px;
+  background:var(--gold4);border:1px solid rgba(154,124,58,0.2);
+  border-radius:20px;font-size:11px;color:var(--gold);
+  font-family:var(--fm);white-space:nowrap;flex-shrink:0;
+}
+.ctx-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.8);}}
+
+.tb-actions{display:flex;gap:6px;flex-shrink:0;}
+.tb-btn{
+  padding:6px 13px;border-radius:8px;font-size:11px;font-family:var(--fb);
+  border:1px solid var(--border2);background:transparent;cursor:pointer;
+  color:var(--ink3);transition:all 0.15s;
+}
+.tb-btn:hover{background:var(--bg2);border-color:var(--border3);}
+.tb-btn.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+
+/* Chat zone */
+#chat-zone{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;position:relative;}
+
+/* Background texture */
+#chat-zone::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(13,13,13,0.03) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+
+/* Welcome */
+#welcome{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:40px;text-align:center;position:relative;z-index:1;
+  animation:fadeIn 0.6s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+.w-badge{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 16px;
+  background:var(--gold3);border:1px solid rgba(154,124,58,0.2);
+  border-radius:20px;font-size:10px;color:var(--gold);
+  font-family:var(--fm);letter-spacing:2px;margin-bottom:24px;
+}
+.w-gem{
+  width:72px;height:72px;border-radius:18px;margin:0 auto 22px;
+  background:var(--ink);display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow3);position:relative;overflow:hidden;
+}
+.w-gem::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,160,82,0.2),transparent 60%);}
+.w-gem-txt{font-family:var(--fh);font-size:28px;font-weight:600;color:var(--bg);position:relative;z-index:1;letter-spacing:-1px;}
+.w-title{font-family:var(--fh);font-size:42px;font-weight:300;color:var(--ink);margin-bottom:6px;letter-spacing:-1px;line-height:1.1;}
+.w-title em{font-style:italic;color:var(--gold);}
+.w-sub{font-size:14px;color:var(--ink4);line-height:1.8;max-width:480px;margin:0 auto 36px;font-weight:300;}
+
+.capability-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;}
+.cap-chip{
+  padding:6px 14px;border-radius:20px;font-size:11px;font-family:var(--fb);
+  border:1px solid var(--border2);background:var(--white);color:var(--ink3);
+  display:flex;align-items:center;gap:6px;box-shadow:var(--shadow);
+  transition:all 0.2s;cursor:default;
+}
+
+.starter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:680px;width:100%;}
+.sc{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:13px;padding:16px 17px;cursor:pointer;
+  text-align:left;transition:all 0.2s;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.sc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.sc:hover{border-color:var(--border3);transform:translateY(-2px);box-shadow:var(--shadow2);}
+.sc:hover::before{opacity:1;}
+.sc-ico{font-size:18px;margin-bottom:8px;}
+.sc-title{font-family:var(--fh);font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.2;}
+.sc-desc{font-size:11px;color:var(--ink4);line-height:1.4;font-weight:300;}
+
+/* Messages */
+#messages{
+  display:none;flex:1;overflow-y:auto;
+  padding:28px 32px;flex-direction:column;gap:22px;
+  position:relative;z-index:1;
+}
+#messages::-webkit-scrollbar{width:3px;}
+#messages::-webkit-scrollbar-track{background:transparent;}
+#messages::-webkit-scrollbar-thumb{background:var(--border3);border-radius:2px;}
+
+.msg-row{display:flex;gap:13px;animation:msgIn 0.32s cubic-bezier(0.16,1,0.3,1);}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg-row.user-row{flex-direction:row-reverse;}
+
+.av{
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;align-self:flex-end;
+}
+.av-ai{background:var(--ink);color:var(--bg);box-shadow:var(--shadow);font-family:var(--fh);font-weight:600;}
+.av-user{background:var(--bg2);color:var(--ink);border:1px solid var(--border2);}
+
+.bub{
+  max-width:68%;border-radius:16px;padding:15px 19px;
+  font-size:14px;line-height:1.8;font-family:var(--fb);font-weight:300;
+  position:relative;
+}
+.bub-ai{
+  background:var(--white);border:1px solid var(--border);
+  color:var(--ink);border-bottom-left-radius:4px;box-shadow:var(--shadow);
+}
+.bub-user{
+  background:var(--ink);color:rgba(247,243,236,0.9);
+  border-bottom-right-radius:4px;box-shadow:var(--shadow);
+}
+.bub-think{
+  background:rgba(154,124,58,0.05);
+  border:1px dashed rgba(154,124,58,0.2);
+  color:var(--ink4);font-style:italic;
+  border-bottom-left-radius:4px;
+  font-size:13px;
+}
+
+/* Mode label */
+.blabel{
+  font-size:8px;letter-spacing:2.5px;margin-bottom:9px;
+  font-family:var(--fm);opacity:0.7;display:flex;align-items:center;gap:6px;
+}
+.blabel::before{content:'';display:inline-block;width:16px;height:1px;background:currentColor;opacity:0.5;}
+
+/* Formatted content */
+.bub h2{font-family:var(--fh);font-size:18px;font-weight:600;margin:14px 0 8px;color:var(--ink);line-height:1.3;}
+.bub h3{font-family:var(--fh);font-size:15px;font-weight:600;margin:12px 0 6px;color:var(--ink);}
+.bub h4{font-family:var(--fb);font-size:13px;font-weight:600;margin:10px 0 4px;color:var(--ink2);letter-spacing:0.5px;}
+.bub p{margin-bottom:9px;}
+.bub p:last-child{margin-bottom:0;}
+.bub strong{font-weight:600;color:inherit;}
+.bub em{font-style:italic;}
+.bub ul,.bub ol{margin-left:20px;margin-top:4px;margin-bottom:9px;}
+.bub li{margin-bottom:5px;line-height:1.7;}
+.bub code{
+  background:rgba(13,13,13,0.06);border-radius:4px;
+  padding:1px 7px;font-family:var(--fm);font-size:12px;
+  color:var(--ink2);border:1px solid var(--border);
+}
+.bub pre{
+  background:var(--ink);border-radius:10px;padding:14px 16px;
+  margin:10px 0;overflow-x:auto;
+}
+.bub pre code{
+  background:transparent;border:none;color:rgba(247,243,236,0.85);
+  font-size:12px;padding:0;
+}
+.bub blockquote{
+  border-left:2px solid var(--gold);padding-left:14px;margin:10px 0;
+  color:var(--ink3);font-style:italic;
+}
+.bub table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+.bub th{background:var(--bg2);padding:8px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.5px;border:1px solid var(--border2);}
+.bub td{padding:8px 12px;border:1px solid var(--border);color:var(--ink3);}
+.bub tr:nth-child(even) td{background:rgba(13,13,13,0.02);}
+
+/* Next step callout */
+.next-step{
+  margin-top:14px;padding:11px 15px;
+  background:var(--gold4);border-left:2px solid var(--gold);
+  border-radius:0 9px 9px 0;
+  font-size:13px;color:var(--ink3);font-style:normal;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.next-step::before{content:'→';color:var(--gold);font-weight:600;flex-shrink:0;}
+
+/* File context strip */
+.file-strip{
+  margin-top:10px;padding:8px 12px;
+  background:var(--gold4);border:1px solid rgba(154,124,58,0.15);
+  border-radius:8px;font-size:11px;font-family:var(--fm);
+  color:var(--gold);display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+}
+
+/* Attached files in user bubble */
+.bub-files{margin-top:8px;display:flex;flex-direction:column;gap:4px;}
+.bub-file{
+  display:flex;align-items:center;gap:7px;padding:6px 10px;
+  background:rgba(247,243,236,0.1);border-radius:7px;
+  font-size:11px;font-family:var(--fm);color:rgba(247,243,236,0.6);
+}
+
+/* Agent plan card */
+.plan-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+  margin-left:49px;box-shadow:var(--shadow);
+  animation:msgIn 0.32s cubic-bezier(0.16,1,0.3,1);
+  max-width:64%;
+}
+.plan-head{
+  font-size:9px;letter-spacing:3px;color:var(--ink3);
+  font-family:var(--fm);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.plan-head::before{content:'';flex:1;height:1px;background:var(--border);}
+.plan-step{
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;
+  opacity:0;transform:translateX(-8px);
+  animation:stepIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes stepIn{to{opacity:1;transform:translateX(0);}}
+.step-n{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  background:var(--ink);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-family:var(--fm);font-weight:500;
+}
+.step-t{font-size:12px;color:var(--ink3);line-height:1.5;padding-top:3px;font-weight:400;}
+
+/* Status */
+.status-row{
+  display:flex;align-items:center;gap:12px;
+  margin-left:49px;padding:4px 0;
+  animation:msgIn 0.3s ease;
+}
+.spin{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid rgba(13,13,13,0.08);border-top-color:var(--ink);
+  animation:spinner 0.75s linear infinite;
+}
+@keyframes spinner{to{transform:rotate(360deg);}}
+.st-txt{font-size:11px;color:var(--ink4);font-family:var(--fm);}
+
+/* ════════ PANELS ════════ */
+/* Quick tools panel */
+#tools-panel{
+  position:absolute;top:0;right:0;bottom:0;
+  width:300px;background:var(--white);
+  border-left:1px solid var(--border);
+  box-shadow:var(--shadow3);
+  transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  z-index:30;display:flex;flex-direction:column;overflow:hidden;
+}
+#tools-panel.open{transform:translateX(0);}
+.panel-head{
+  padding:18px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--white);
+}
+.panel-title{font-family:var(--fh);font-size:17px;font-weight:600;color:var(--ink);}
+.panel-close{
+  width:28px;height:28px;border-radius:7px;border:1px solid var(--border2);
+  background:transparent;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:14px;color:var(--ink3);transition:all 0.15s;
+}
+.panel-close:hover{background:var(--bg2);}
+.panel-body{flex:1;overflow-y:auto;padding:16px;}
+.panel-body::-webkit-scrollbar{width:3px;}
+.panel-body::-webkit-scrollbar-thumb{background:var(--border2);}
+
+.tool-section{margin-bottom:20px;}
+.tool-section-label{
+  font-size:9px;letter-spacing:3px;color:var(--ink4);
+  font-family:var(--fm);margin-bottom:8px;
+}
+.tool-btn{
+  width:100%;padding:11px 14px;border-radius:9px;
+  border:1px solid var(--border);background:var(--bg);
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+  transition:all 0.15s;margin-bottom:6px;text-align:left;
+}
+.tool-btn:hover{background:var(--bg2);border-color:var(--border2);}
+.tool-btn-ico{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
+.tool-btn-info{flex:1;}
+.tool-btn-name{font-size:12px;font-weight:500;color:var(--ink);font-family:var(--fb);}
+.tool-btn-desc{font-size:10px;color:var(--ink4);margin-top:1px;}
+
+/* ════════ INPUT ════════ */
+#input-area{
+  padding:14px 24px 18px;
+  border-top:1px solid var(--border);
+  background:rgba(253,250,245,0.95);
+  backdrop-filter:blur(10px);
+  flex-shrink:0;
+}
+.active-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;}
+.achip{
+  display:flex;align-items:center;gap:5px;padding:4px 10px;
+  background:var(--gold3);border:1px solid rgba(154,124,58,0.25);
+  border-radius:20px;font-size:10px;color:var(--gold);font-family:var(--fm);
+}
+.achip-x{cursor:pointer;opacity:0.6;margin-left:2px;font-size:11px;}
+.achip-x:hover{opacity:1;}
+
+.iw{
+  display:flex;gap:10px;align-items:flex-end;
+  background:var(--bg1);border:1px solid var(--border2);
+  border-radius:13px;padding:11px 14px;transition:all 0.2s;
+}
+.iw:focus-within{
+  border-color:var(--ink3);
+  box-shadow:0 0 0 3px rgba(13,13,13,0.05);
+}
+#inp{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--ink);font-family:var(--fb);font-size:14px;font-weight:300;
+  line-height:1.6;resize:none;max-height:160px;overflow-y:auto;
+}
+#inp::placeholder{color:var(--ink5);}
+
+.inp-actions{display:flex;gap:6px;align-items:flex-end;flex-shrink:0;}
+.inp-ico-btn{
+  width:34px;height:34px;border-radius:9px;border:1px solid var(--border2);
+  background:transparent;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:15px;color:var(--ink4);transition:all 0.15s;
+}
+.inp-ico-btn:hover{background:var(--bg2);color:var(--ink2);}
+.send-btn{
+  width:40px;height:40px;border-radius:11px;border:none;
+  background:var(--ink);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:17px;color:rgba(247,243,236,0.9);
+  transition:all 0.2s;box-shadow:var(--shadow);
+}
+.send-btn:hover{background:var(--ink2);transform:scale(1.04);}
+.send-btn:disabled{opacity:0.25;cursor:not-allowed;transform:none;}
+
+.if{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:9px;padding:0 2px;
+}
+.if-l{display:flex;align-items:center;gap:8px;}
+.if-hint{font-size:10px;color:var(--ink5);font-family:var(--fm);}
+.mode-indicator{
+  display:flex;align-items:center;gap:5px;padding:3px 10px;
+  border-radius:20px;border:1px solid transparent;
+  font-size:10px;font-family:var(--fm);transition:all 0.2s;
+}
+
+/* ════════ RESPONSIVE ════════ */
+@media(max-width:768px){
+  :root{--sidebar:0px;}
+  #sidebar{display:none;}
+  .starter-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .starter-grid{grid-template-columns:1fr;}
+  .capability-row{display:none;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══════ SIDEBAR ══════ -->
+<div id="sidebar">
+  <div class="sb-logo" onclick="goHome()">
+    <div class="sb-logo-row">
+      <div class="sb-gem"><div class="sb-gem-inner">N</div></div>
+      <div class="sb-name">Nexus</div>
+    </div>
+    <div class="sb-tagline">Business Intelligence Suite</div>
+  </div>
+
+  <div style="padding:12px 14px 8px;">
+    <button class="sb-new" onclick="newConvo()">
+      <div class="sb-new-icon">+</div>
+      New Conversation
+    </button>
+  </div>
+
+  <div class="sb-label">Intelligence Mode</div>
+  <div class="sb-modes" id="mode-btns">
+    <button class="sb-mode-btn m-auto active" data-mode="auto" onclick="setMode('auto')">
+      <div class="sb-mode-icon">✦</div>
+      <div class="sb-mode-label">
+        <div class="sb-mode-name">Auto-Detect</div>
+        <div class="sb-mode-desc">Adapts to your request</div>
+      </div>
+      <div class="sb-mode-badge">AUTO</div>
+    </button>
+    <button class="sb-mode-btn m-business" data-mode="business" onclick="setMode('business')">
+      <div class="sb-mode-icon">📈</div>
+      <div class="sb-mode-label">
+        <div class="sb-mode-name">Business</div>
+        <div class="sb-mode-desc">Strategy, finance, operations</div>
+      </div>
+    </button>
+    <button class="sb-mode-btn m-legal" data-mode="legal" onclick="setMode('legal')">
+      <div class="sb-mode-icon">⚖️</div>
+      <div class="sb-mode-label">
+        <div class="sb-mode-name">Legal</div>
+        <div class="sb-mode-desc">Contracts, compliance, law</div>
+      </div>
+    </button>
+    <button class="sb-mode-btn m-math" data-mode="math" onclick="setMode('math')">
+      <div class="sb-mode-icon">∑</div>
+      <div class="sb-mode-label">
+        <div class="sb-mode-name">Math & Data</div>
+        <div class="sb-mode-desc">Calculations, analysis, stats</div>
+      </div>
+    </button>
+    <button class="sb-mode-btn m-literature" data-mode="literature" onclick="setMode('literature')">
+      <div class="sb-mode-icon">✍️</div>
+      <div class="sb-mode-label">
+        <div class="sb-mode-name">Writing</div>
+        <div class="sb-mode-desc">Drafts, editing, literature</div>
+      </div>
+    </button>
+    <button class="sb-mode-btn m-strategy" data-mode="strategy" onclick="setMode('strategy')">
+      <div class="sb-mode-icon">◎</div>
+      <div class="sb-mode-label">
+        <div class="sb-mode-name">Deep Strategy</div>
+        <div class="sb-mode-desc">Analysis, frameworks, vision</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="sb-label">History</div>
+  <div id="convo-list"></div>
+
+  <div class="sb-files">
+    <div class="sb-files-head">
+      <span>Documents</span>
+      <span class="sb-files-count" id="file-count">0 files</span>
+    </div>
+    <label class="drop-zone" id="dz">
+      <input type="file" id="fi" multiple accept=".txt,.pdf,.csv,.md,.json,.html,.js,.py,.ts,.docx" onchange="handleFiles(this.files)"/>
+      <div class="drop-icon">📎</div>
+      <div class="drop-text">Drop files · <span>Browse</span><br/>AI reads & references them</div>
+    </label>
+    <div id="file-list"></div>
+  </div>
+</div>
+
+<!-- ══════ MAIN ══════ -->
+<div id="main">
+  <!-- Topbar -->
+  <div id="topbar">
+    <div class="tb-title" id="tb-title">
+      Good morning
+      <span class="tb-sub" id="tb-sub">Ready to assist</span>
+    </div>
+    <div class="ctx-pill" id="ctx-pill" style="display:none;">
+      <div class="ctx-dot"></div>
+      <span id="ctx-txt">Context active</span>
+    </div>
+    <div class="tb-actions">
+      <button class="tb-btn" onclick="toggleTools()" id="tools-toggle-btn">🛠 Tools</button>
+      <button class="tb-btn" onclick="exportChat()" id="export-btn" style="display:none;">↓ Export</button>
+      <button class="tb-btn" onclick="clearChat()" id="clear-btn" style="display:none;">Clear</button>
+    </div>
+  </div>
+
+  <!-- Chat zone -->
+  <div id="chat-zone">
+    <!-- Welcome -->
+    <div id="welcome">
+      <div class="w-badge">✦ AI BUSINESS INTELLIGENCE</div>
+      <div class="w-gem"><div class="w-gem-txt">N</div></div>
+      <div class="w-title">Meet <em>Nexus</em></div>
+      <div class="w-sub">Your complete business guide — strategy, legal, finance, writing, math, and deep analysis. Upload documents, assign tasks, and think through anything with full persistent memory.</div>
+
+      <div class="capability-row">
+        <div class="cap-chip">📈 Business Strategy</div>
+        <div class="cap-chip">⚖️ Legal Analysis</div>
+        <div class="cap-chip">∑ Math & Finance</div>
+        <div class="cap-chip">✍️ Writing & Editing</div>
+        <div class="cap-chip">📊 Data Analysis</div>
+        <div class="cap-chip">◎ Deep Thinking</div>
+        <div class="cap-chip">📎 Document Chat</div>
+      </div>
+
+      <div class="starter-grid">
+        <div class="sc" onclick="starter('Build a complete go-to-market strategy for a new SaaS product targeting SMBs. Include positioning, pricing, channels, and a 90-day launch roadmap.')">
+          <div class="sc-ico">🚀</div>
+          <div class="sc-title">Go-to-Market Strategy</div>
+          <div class="sc-desc">Full GTM plan with timeline</div>
+        </div>
+        <div class="sc" onclick="starter('Draft a professional non-disclosure agreement (NDA) for a business partnership. Include mutual confidentiality, term, exclusions, and remedies.')">
+          <div class="sc-ico">⚖️</div>
+          <div class="sc-title">Draft Legal Document</div>
+          <div class="sc-desc">Contracts, NDAs, agreements</div>
+        </div>
+        <div class="sc" onclick="starter('Build a detailed financial model for a startup: revenue projections, burn rate, unit economics, and break-even analysis for 3 years.')">
+          <div class="sc-ico">💰</div>
+          <div class="sc-title">Financial Model</div>
+          <div class="sc-desc">P&L, projections, unit economics</div>
+        </div>
+        <div class="sc" onclick="starter('Conduct a full SWOT analysis and competitive landscape assessment for a business entering the e-commerce market in 2025.')">
+          <div class="sc-ico">🎯</div>
+          <div class="sc-title">SWOT & Competitive Analysis</div>
+          <div class="sc-desc">Market positioning deep-dive</div>
+        </div>
+        <div class="sc" onclick="starter('Write a compelling executive pitch deck narrative for a Series A fundraise. Cover problem, solution, market size, traction, team, and ask.')">
+          <div class="sc-ico">📊</div>
+          <div class="sc-title">Investor Pitch Narrative</div>
+          <div class="sc-desc">Series A / fundraising story</div>
+        </div>
+        <div class="sc" onclick="starter('Help me think through a difficult business decision I am facing. I will describe the situation and I need deep strategic analysis with pros, cons, risks, and a clear recommendation.')">
+          <div class="sc-ico">🧠</div>
+          <div class="sc-title">Strategic Decision</div>
+          <div class="sc-desc">Deep analysis & recommendation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages"></div>
+
+    <!-- Tools panel -->
+    <div id="tools-panel">
+      <div class="panel-head">
+        <div class="panel-title">Quick Tools</div>
+        <button class="panel-close" onclick="toggleTools()">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="tool-section">
+          <div class="tool-section-label">Business</div>
+          <div class="tool-btn" onclick="quickTool('Write a professional executive summary for a business report')">
+            <div class="tool-btn-ico">📄</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Executive Summary</div><div class="tool-btn-desc">Professional report summary</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Create a detailed OKR framework for a growing business this quarter')">
+            <div class="tool-btn-ico">🎯</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">OKR Framework</div><div class="tool-btn-desc">Objectives & key results</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Build a competitive analysis matrix comparing 5 competitors across 8 key dimensions')">
+            <div class="tool-btn-ico">⚔️</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Competitor Matrix</div><div class="tool-btn-desc">Side-by-side comparison</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Draft a professional cold outreach email for B2B sales that converts')">
+            <div class="tool-btn-ico">✉️</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Cold Outreach Email</div><div class="tool-btn-desc">B2B sales copy</div></div>
+          </div>
+        </div>
+        <div class="tool-section">
+          <div class="tool-section-label">Legal</div>
+          <div class="tool-btn" onclick="quickTool('Review and summarize key risks in a standard vendor contract. List red flags and suggested modifications.')">
+            <div class="tool-btn-ico">🔍</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Contract Risk Review</div><div class="tool-btn-desc">Red flags & recommendations</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Draft a freelancer/contractor agreement with IP assignment, confidentiality, and payment terms')">
+            <div class="tool-btn-ico">📝</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Contractor Agreement</div><div class="tool-btn-desc">IP, NDA, payment terms</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Explain GDPR compliance requirements for a SaaS company collecting user data')">
+            <div class="tool-btn-ico">🛡️</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">GDPR Compliance Guide</div><div class="tool-btn-desc">Data privacy requirements</div></div>
+          </div>
+        </div>
+        <div class="tool-section">
+          <div class="tool-section-label">Finance & Math</div>
+          <div class="tool-btn" onclick="quickTool('Calculate and explain unit economics: CAC, LTV, LTV:CAC ratio, payback period, and churn impact for a subscription business')">
+            <div class="tool-btn-ico">∑</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Unit Economics</div><div class="tool-btn-desc">CAC, LTV, payback period</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Build a 3-year revenue forecast model with assumptions, scenarios (base/bull/bear), and key metrics')">
+            <div class="tool-btn-ico">📈</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Revenue Forecast</div><div class="tool-btn-desc">3-year projections & scenarios</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Explain and calculate DCF (Discounted Cash Flow) valuation for a business')">
+            <div class="tool-btn-ico">💎</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">DCF Valuation</div><div class="tool-btn-desc">Business valuation model</div></div>
+          </div>
+        </div>
+        <div class="tool-section">
+          <div class="tool-section-label">Writing & Communication</div>
+          <div class="tool-btn" onclick="quickTool('Write a compelling company mission, vision, and values statement')">
+            <div class="tool-btn-ico">✨</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Mission & Vision</div><div class="tool-btn-desc">Company identity statement</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Write a professional press release announcing a new product launch')">
+            <div class="tool-btn-ico">📢</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Press Release</div><div class="tool-btn-desc">Product announcement copy</div></div>
+          </div>
+          <div class="tool-btn" onclick="quickTool('Create a comprehensive content marketing strategy with topics, formats, and distribution plan')">
+            <div class="tool-btn-ico">📱</div>
+            <div class="tool-btn-info"><div class="tool-btn-name">Content Strategy</div><div class="tool-btn-desc">Marketing & distribution plan</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div id="input-area">
+    <div class="active-chips" id="active-chips"></div>
+    <div class="iw">
+      <textarea id="inp" rows="1"
+        placeholder="Ask anything — business, legal, math, writing, strategy, documents…"
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"></textarea>
+      <div class="inp-actions">
+        <label class="inp-ico-btn" title="Attach file" style="cursor:pointer;">
+          <input type="file" style="display:none;" multiple accept=".txt,.pdf,.csv,.md,.json,.html,.js,.py,.ts" onchange="handleFiles(this.files)"/>
+          📎
+        </label>
+        <button class="send-btn" id="send-btn" onclick="send()">↑</button>
+      </div>
+    </div>
+    <div class="if">
+      <div class="if-l">
+        <div class="if-hint">Enter to send · Shift+Enter for newline</div>
+        <div class="mode-indicator" id="mode-ind"></div>
+      </div>
+      <div class="if-hint" id="file-hint" style="color:var(--gold);"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// SYSTEM PROMPT — The brain
+// ══════════════════════════════════════════════════
+const SYSTEM = `You are Nexus — a world-class Business Intelligence AI. You serve as the ultimate guide for business, legal, mathematics, writing, strategy, and any challenge your user faces.
+
+YOUR IDENTITY:
+You combine the best of: McKinsey-level strategy consulting, senior legal counsel, quantitative financial analysis, world-class writing, and executive leadership wisdom.
+
+EXPERTISE DOMAINS:
+• BUSINESS: Strategy, operations, marketing, sales, fundraising, OKRs, financial modeling, unit economics, pricing, growth, market analysis, competitive intelligence, product strategy
+• LEGAL: Contract drafting & review, NDA, IP, employment law, corporate structure, compliance (GDPR, SOC2, etc.), M&A basics, terms of service, privacy policy — always note you are AI and recommend consulting a lawyer for binding decisions
+• MATHEMATICS & FINANCE: DCF, NPV, IRR, unit economics, statistical analysis, financial modeling, break-even, valuation, probability, data interpretation, forecasting
+• WRITING & COMMUNICATION: Executive communications, investor materials, press releases, proposals, contracts, editing, content strategy, brand voice, storytelling
+• STRATEGY & ANALYSIS: SWOT, Porter's Five Forces, Jobs-to-be-Done, Blue Ocean, OKRs, balanced scorecard, scenario planning, decision frameworks, risk analysis
+
+RESPONSE STYLE:
+• Executive-level: high signal-to-noise, crisp and precise
+• Use **bold** for key terms and section headers
+• Use ## for major sections, ### for sub-sections
+• Use tables for comparisons and structured data
+• Use > blockquotes for key insights or cautions
+• Always show your reasoning for complex analysis
+• Reference earlier conversation context explicitly: "As you mentioned…" or "Building on your [business/goal]…"
+• When documents are uploaded, cite them specifically: "Per [filename]…"
+• End substantive responses with "→ **Next Step:**" with a concrete recommended action
+• For legal content: include a brief note that AI analysis is for reference and a licensed attorney should review binding decisions
+• For math: show your work step by step
+
+AGENT MODE (complex tasks — plan/build/create/analyze/develop):
+1. State "**Executing:** [task name]"
+2. Show numbered execution plan
+3. Deliver each section with clear ## headers
+4. Summarize with → Next Step
+
+THINK MODE (analysis/strategy/decisions):
+- Lead with your core insight
+- Show reasoning chain
+- Surface non-obvious risks and opportunities
+- Give a clear recommendation with confidence level
+
+Be the smartest, most trustworthy advisor in the room. Never be vague or generic. Always be specific, cite frameworks by name, use real numbers when relevant.`;
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let convos={}, activeId=null, files=[], isLoading=false, currentMode='auto', toolsOpen=false;
+const MODECOLORS={auto:'var(--ink4)',business:'var(--gold)',legal:'#818cf8',math:'#34d399',literature:'#f87171',strategy:'#38bdf8'};
+const MODELABELS={auto:'AUTO',business:'BUSINESS',legal:'LEGAL',math:'MATH',literature:'WRITING',strategy:'STRATEGY'};
+
+// ══════════════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════════════
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function save(){try{const s={};for(const[k,v]of Object.entries(convos))s[k]={...v,messages:v.messages.slice(-60)};localStorage.setItem('nx2_c',JSON.stringify(s));localStorage.setItem('nx2_a',activeId);}catch(e){}}
+function load(){try{const s=localStorage.getItem('nx2_c');if(s)convos=JSON.parse(s);const a=localStorage.getItem('nx2_a');if(a&&convos[a])activeId=a;}catch(e){}}
+
+// ══════════════════════════════════════════════════
+// CONVERSATIONS
+// ══════════════════════════════════════════════════
+function newConvo(){
+  const id=uid();
+  convos[id]={id,title:'New Session',messages:[],mode:'auto',created:new Date().toISOString()};
+  activeId=id;save();renderList();
+  showWelcome();
+  setTopbar('New Session','Ready to assist');
+  document.getElementById('ctx-pill').style.display='none';
+  document.getElementById('export-btn').style.display='none';
+  document.getElementById('clear-btn').style.display='none';
+}
+
+function switchConvo(id){
+  activeId=id;renderList();
+  const c=convos[id];
+  const um=c.messages.filter(m=>m.role==='user').length;
+  if(um>0){showMsgs();renderMessages();}else{showWelcome();}
+  setTopbar(c.title,um>0?`${um} message${um!==1?'s':''} · ${MODELABELS[c.mode]||'AUTO'} mode`:'Ready to assist');
+  updateCtxPill(c);
+}
+
+function goHome(){if(activeId&&convos[activeId]?.messages.length===0)return;newConvo();}
+
+function updateCtxPill(c){
+  const um=c.messages.filter(m=>m.role==='user').length;
+  const pill=document.getElementById('ctx-pill');
+  if(um>0){
+    pill.style.display='flex';
+    document.getElementById('ctx-txt').textContent=`${um} msg${um!==1?'s':''} in memory`;
+    document.getElementById('export-btn').style.display='flex';
+    document.getElementById('clear-btn').style.display='flex';
+  } else {pill.style.display='none';}
+}
+
+function renderList(){
+  const el=document.getElementById('convo-list');
+  const ids=Object.keys(convos).sort((a,b)=>new Date(convos[b].created)-new Date(convos[a].created));
+  if(!ids.length){el.innerHTML='<div style="padding:8px 20px;font-size:10px;color:rgba(255,255,255,0.18);font-family:var(--fm);">No sessions yet</div>';return;}
+  el.innerHTML=ids.map(id=>{
+    const c=convos[id];const ia=id===activeId;
+    const um=c.messages.filter(m=>m.role==='user').length;
+    const dotColor=MODECOLORS[c.mode]||'var(--ink4)';
+    return`<div class="ci${ia?' active':''}" onclick="switchConvo('${id}')">
+      <div class="ci-title">${esc(c.title)}</div>
+      <div class="ci-meta">
+        <div class="ci-mode-dot" style="background:${dotColor};"></div>
+        ${MODELABELS[c.mode]||'AUTO'} · ${um} msg${um!==1?'s':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// FILES
+// ══════════════════════════════════════════════════
+async function handleFiles(fileList){
+  for(const f of Array.from(fileList)){
+    const id=uid();let content='';
+    try{
+      const textTypes=['text/','application/json','application/javascript'];
+      const textExts=/\.(txt|md|csv|json|html|js|ts|py|css|xml|yaml|yml)$/i;
+      if(textTypes.some(t=>f.type.startsWith(t))||textExts.test(f.name)){
+        content=await f.text();
+        if(content.length>12000)content=content.substring(0,12000)+'\n[... truncated for context ...]';
+      } else {
+        content=`[Binary file: ${f.name} · ${fmtSize(f.size)} · ${f.type||'unknown type'}]\nNote: This file type cannot be read as text. Describe its contents to get assistance.`;
+      }
+    }catch(e){content=`[Error reading: ${f.name}]`;}
+    files.push({id,name:f.name,size:f.size,type:f.type,content,active:true});
+  }
+  renderFiles();renderChips();
+  document.getElementById('file-hint').textContent=files.filter(f=>f.active).length?`${files.filter(f=>f.active).length} file${files.filter(f=>f.active).length!==1?'s':''} in context`:'';
+  document.getElementById('file-count').textContent=files.length+' file'+(files.length!==1?'s':'');
+}
+
+function toggleFile(id){const f=files.find(x=>x.id===id);if(f){f.active=!f.active;renderFiles();renderChips();updateFileHint();}}
+function deleteFile(id,e){e.stopPropagation();files=files.filter(f=>f.id!==id);renderFiles();renderChips();updateFileHint();document.getElementById('file-count').textContent=files.length+' file'+(files.length!==1?'s':'');}
+function updateFileHint(){const n=files.filter(f=>f.active).length;document.getElementById('file-hint').textContent=n?`${n} file${n!==1?'s':''} in context`:'';}
+
+const FICONS={'pdf':'📄','csv':'📊','txt':'📝','md':'📝','json':'🔧','js':'📦','ts':'📦','py':'🐍','html':'🌐','docx':'📘'};
+function renderFiles(){
+  const el=document.getElementById('file-list');
+  if(!files.length){el.innerHTML='';return;}
+  el.innerHTML=files.map(f=>{
+    const ext=f.name.split('.').pop().toLowerCase();
+    const ico=FICONS[ext]||'📎';
+    return`<div class="fi${f.active?' on':''}" onclick="toggleFile('${f.id}')">
+      <div class="fi-ico">${ico}</div>
+      <div class="fi-info">
+        <div class="fi-name">${esc(f.name.length>26?f.name.substring(0,26)+'…':f.name)}</div>
+        <div class="fi-sz">${fmtSize(f.size)} · ${f.active?'<span style="color:rgba(196,160,82,0.9)">in context</span>':'paused'}</div>
+      </div>
+      <div class="fi-del" onclick="deleteFile('${f.id}',event)">✕</div>
+    </div>`;
+  }).join('');
+}
+
+function renderChips(){
+  const el=document.getElementById('active-chips');
+  const active=files.filter(f=>f.active);
+  if(!active.length){el.innerHTML='';return;}
+  el.innerHTML=active.map(f=>`<div class="achip">📎 ${esc(f.name.length>24?f.name.substring(0,24)+'…':f.name)}<span class="achip-x" onclick="toggleFile('${f.id}')">✕</span></div>`).join('');
+}
+
+// Drop zone
+const dz=document.getElementById('dz');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+
+// ══════════════════════════════════════════════════
+// RENDERING
+// ══════════════════════════════════════════════════
+function showWelcome(){
+  document.getElementById('welcome').style.display='flex';
+  document.getElementById('messages').style.display='none';
+}
+function showMsgs(){
+  document.getElementById('welcome').style.display='none';
+  const e=document.getElementById('messages');
+  e.style.display='flex';e.style.flexDirection='column';
+}
+function setTopbar(title,sub){
+  document.getElementById('tb-title').innerHTML=esc(title)+`<span class="tb-sub">${esc(sub)}</span>`;
+}
+function scrollBot(){const e=document.getElementById('messages');if(e)e.scrollTop=e.scrollHeight;}
+
+function renderMessages(){
+  const el=document.getElementById('messages');el.innerHTML='';
+  const c=convos[activeId];if(!c)return;
+  for(const m of c.messages)el.appendChild(buildMsg(m));
+  scrollBot();
+}
+
+function buildMsg(m){
+  const row=document.createElement('div');
+  row.className='msg-row'+(m.role==='user'?' user-row':'');
+  const av=document.createElement('div');
+  av.className='av '+(m.role==='user'?'av-user':'av-ai');
+  av.textContent=m.role==='user'?'You':'N';
+  const bub=document.createElement('div');
+
+  if(m.thinking){
+    bub.className='bub bub-think';
+    bub.innerHTML=`<div class="blabel" style="color:var(--gold);">◈ ANALYSIS CHAIN</div>${md(m.content)}`;
+  } else if(m.role==='user'){
+    bub.className='bub bub-user';
+    bub.innerHTML=md(m.content);
+    if(m.files?.length){
+      bub.innerHTML+=`<div class="bub-files">${m.files.map(f=>`<div class="bub-file">📎 ${esc(f)}</div>`).join('')}</div>`;
+    }
+  } else {
+    bub.className='bub bub-ai';
+    const modeColors={business:'var(--gold)',legal:'#818cf8',math:'#34d399',literature:'#f87171',strategy:'#38bdf8'};
+    const modeLabel=m.mode&&m.mode!=='auto'&&m.mode!=='chat'
+      ?`<div class="blabel" style="color:${modeColors[m.mode]||'var(--ink4)'};">${MODELABELS[m.mode]||m.mode.toUpperCase()} MODE</div>`:'';
+    bub.innerHTML=modeLabel+md(m.content);
+    if(m.filesUsed?.length){
+      bub.innerHTML+=`<div class="file-strip">📎 Referenced: ${m.filesUsed.map(esc).join(', ')}</div>`;
+    }
+  }
+  row.appendChild(av);row.appendChild(bub);
+  return row;
+}
+
+function addMsg(m){
+  showMsgs();
+  const el=document.getElementById('messages');
+  el.appendChild(buildMsg(m));scrollBot();
+}
+
+// Markdown renderer
+function md(t){
+  if(!t)return'';
+  return t
+    .replace(/```(\w*)\n([\s\S]*?)```/g,(m,lang,code)=>`<pre><code>${esc(code.trim())}</code></pre>`)
+    .replace(/`([^`]+)`/g,(m,c)=>`<code>${esc(c)}</code>`)
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^#### (.+)$/gm,'<h4>$1</h4>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^→ \*\*Next Step:\*\*(.+)$/gm,'<div class="next-step"><strong>Next Step:</strong>$1</div>')
+    .replace(/^→ (.+)$/gm,'<div class="next-step">$1</div>')
+    .replace(/^\|(.+)\|$/gm,row=>{
+      const cells=row.split('|').filter((_,i,a)=>i>0&&i<a.length-1);
+      return`<tr>${cells.map(c=>c.trim().match(/^[-:]+$/)
+        ?'':`<td>${c.trim()}</td>`).join('')}</tr>`;
+    })
+    .replace(/(<tr>.*<\/tr>\n?)+/g,m=>`<table>${m}</table>`)
+    .replace(/<tr><\/tr>/g,'')
+    .replace(/^[-•*] (.+)$/gm,'<li>$1</li>')
+    .replace(/^(\d+)\. (.+)$/gm,'<li><strong>$1.</strong> $2</li>')
+    .replace(/(<li>[\s\S]*?<\/li>\n?)+/g,m=>`<ul>${m}</ul>`)
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/\n/g,'<br>')
+    .replace(/^(?!<[htpuobd])/,'<p>')
+    .replace(/(?<![>])$/,'</p>');
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmtSize(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+
+// ══════════════════════════════════════════════════
+// MODE
+// ══════════════════════════════════════════════════
+function setMode(m){
+  currentMode=m;
+  document.querySelectorAll('.sb-mode-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.mode===m);
+  });
+  updateModeIndicator(m);
+}
+
+function updateModeIndicator(m){
+  const el=document.getElementById('mode-ind');
+  if(!el)return;
+  if(m==='auto'){el.style.display='none';return;}
+  el.style.display='flex';
+  el.style.color=MODECOLORS[m]||'var(--ink4)';
+  el.style.borderColor=(MODECOLORS[m]||'var(--ink4)').replace('var(--gold)','rgba(154,124,58,0.3)');
+  el.style.background=(MODECOLORS[m]||'var(--ink4)').replace('var(--gold)','var(--gold4)');
+  el.textContent=MODELABELS[m]||m.toUpperCase()+' MODE';
+}
+
+function detectMode(t){
+  if(currentMode!=='auto')return currentMode;
+  if(/\b(contract|legal|law|nda|agreement|clause|compliance|gdpr|intellectual property|liability|terms|privacy policy|attorney|lawsuit|regulation|ip|copyright|trademark)\b/i.test(t))return'legal';
+  if(/\b(calculat|math|formula|equation|statistic|probability|dcf|npv|irr|variance|regression|percent|roi|financial model|valuation|algebra|calculus|derivative)\b/i.test(t))return'math';
+  if(/\b(write|draft|edit|proofread|essay|article|blog|press release|copy|narrative|story|poem|lit|novel|chapter|paragraph|grammar|style|tone|voice)\b/i.test(t))return'literature';
+  if(/\b(strategy|analyze|analysis|swot|competitive|market|framework|decision|evaluate|assess|risk|opportunity|think through|compare|scenario|recommend)\b/i.test(t))return'strategy';
+  if(/\b(business|revenue|sales|marketing|product|startup|gtm|launch|customer|pricing|growth|fundraise|investor|pitch|vc|okr|kpi|ops|team|hire)\b/i.test(t))return'business';
+  return'auto';
+}
+
+// ══════════════════════════════════════════════════
+// SEND
+// ══════════════════════════════════════════════════
+async function send(){
+  if(isLoading)return;
+  const inp=document.getElementById('inp');
+  const text=inp.value.trim();
+  if(!text)return;
+  inp.value='';inp.style.height='auto';
+
+  if(!activeId)newConvo();
+  const c=convos[activeId];
+
+  const activeFiles=files.filter(f=>f.active);
+  const userMsg={role:'user',content:text,files:activeFiles.map(f=>f.name)};
+  c.messages.push(userMsg);
+  addMsg(userMsg);
+
+  const mode=detectMode(text);
+  c.mode=mode;
+
+  if(c.messages.filter(m=>m.role==='user').length===1){
+    c.title=text.length>46?text.substring(0,46)+'…':text;
+  }
+  const um=c.messages.filter(m=>m.role==='user').length;
+  setTopbar(c.title,`${um} message${um!==1?'s':''} · ${MODELABELS[mode]||'AUTO'} mode`);
+  updateCtxPill(c);renderList();
+
+  isLoading=true;
+  document.getElementById('send-btn').disabled=true;
+
+  // Status indicator
+  const statusEl=document.createElement('div');
+  statusEl.className='status-row';statusEl.id='status-el';
+  const stMsgs={auto:'Thinking…',business:'Analyzing business context…',legal:'Reviewing legal context…',math:'Working through the numbers…',literature:'Crafting response…',strategy:'Deep analysis in progress…'};
+  statusEl.innerHTML=`<div class="av av-ai" style="opacity:0.4;">N</div>
+    <div><div class="spin" style="margin-bottom:3px;"></div>
+    <div class="st-txt">${stMsgs[mode]||'Thinking…'}</div></div>`;
+  document.getElementById('messages').appendChild(statusEl);scrollBot();
+
+  try{
+    // AGENT: plan for complex tasks
+    const needsPlan=/\b(build|create|make|plan|develop|draft|generate|design|write|launch|structure|outline|build out|put together|create a full)\b/i.test(text)&&text.length>40;
+
+    if(needsPlan){
+      try{
+        const planRes=await callAPI([{role:'user',content:`You are a task planner. For this request: "${text.substring(0,200)}" — respond with ONLY a JSON array of 4-6 short action strings (no markdown, no explanation). Example: ["Analyze requirements","Structure framework","Draft content","Add specifics","Final polish"]`}],250);
+        const cleanPlan=planRes.replace(/```json|```/g,'').trim();
+        let steps=[];
+        try{steps=JSON.parse(cleanPlan);}catch(e){}
+        if(steps.length>0){
+          document.getElementById('status-el')?.remove();
+          const pc=document.createElement('div');pc.className='plan-card';
+          pc.innerHTML=`<div class="plan-head">EXECUTION PLAN</div>
+            ${steps.map((s,i)=>`<div class="plan-step" style="animation-delay:${i*0.1}s">
+              <div class="step-n">${i+1}</div><div class="step-t">${esc(s)}</div>
+            </div>`).join('')}`;
+          document.getElementById('messages').appendChild(pc);scrollBot();
+
+          // Re-add status
+          const st2=document.createElement('div');st2.className='status-row';st2.id='status-el';
+          st2.innerHTML=`<div class="av av-ai" style="opacity:0.4;">N</div>
+            <div><div class="spin" style="margin-bottom:3px;"></div>
+            <div class="st-txt">Executing…</div></div>`;
+          document.getElementById('messages').appendChild(st2);scrollBot();
+        }
+      }catch(e){}
+    }
+
+    // Build API messages with full context
+    const apiMsgs=[];
+
+    // Inject file content as context
+    if(activeFiles.length){
+      const fileCtx=activeFiles.map(f=>`=== DOCUMENT: ${f.name} ===\n${f.content}`).join('\n\n');
+      apiMsgs.push({role:'user',content:`[DOCUMENT CONTEXT — Please read and reference these in your response]\n\n${fileCtx}`});
+      apiMsgs.push({role:'assistant',content:`I have read all ${activeFiles.length} document${activeFiles.length!==1?'s':''}: ${activeFiles.map(f=>f.name).join(', ')}. I will reference them specifically in my analysis.`});
+    }
+
+    // Add mode context
+    if(mode!=='auto'){
+      const modeCtx={
+        business:"The user is in BUSINESS mode. Prioritize business strategy, operations, finance, and growth frameworks.",
+        legal:"The user is in LEGAL mode. Apply legal analysis, cite relevant legal concepts, and note that final decisions should involve a licensed attorney.",
+        math:"The user is in MATH/DATA mode. Show all calculations step by step. Format numbers clearly. Use tables for data.",
+        literature:"The user is in WRITING mode. Focus on craft, clarity, style, and professional communication quality.",
+        strategy:"The user is in DEEP STRATEGY mode. Apply rigorous analytical frameworks. Surface non-obvious insights. Give clear recommendations."
+      };
+      if(modeCtx[mode])apiMsgs.push({role:'user',content:`[MODE CONTEXT: ${modeCtx[mode]}]`},{role:'assistant',content:'Understood. Applying specialized mode.'});
+    }
+
+    // Full conversation history
+    for(const m of c.messages){
+      if(m.role==='user'||(!m.thinking&&m.role==='assistant')){
+        apiMsgs.push({role:m.role,content:m.content});
+      }
+    }
+
+    const reply=await callAPI(apiMsgs,1600);
+    document.getElementById('status-el')?.remove();
+
+    const aiMsg={role:'assistant',content:reply,mode,filesUsed:activeFiles.length?activeFiles.map(f=>f.name):null};
+    c.messages.push(aiMsg);
+    addMsg(aiMsg);
+    save();renderList();
+
+  }catch(err){
+    document.getElementById('status-el')?.remove();
+    const em={role:'assistant',content:'⚠️ **Connection error.** Please check your connection and try again. Your conversation history is preserved.',mode:'chat'};
+    c.messages.push(em);addMsg(em);
+  }
+
+  isLoading=false;
+  document.getElementById('send-btn').disabled=false;
+  document.getElementById('inp').focus();
+}
+
+async function callAPI(messages,maxTokens=1600){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,system:SYSTEM,messages})
+  });
+  if(!res.ok)throw new Error(`API error ${res.status}`);
+  const d=await res.json();
+  return d.content?.map(b=>b.text||'').join('')||'No response received.';
+}
+
+// ══════════════════════════════════════════════════
+// TOOLS PANEL
+// ══════════════════════════════════════════════════
+function toggleTools(){
+  toolsOpen=!toolsOpen;
+  document.getElementById('tools-panel').classList.toggle('open',toolsOpen);
+  document.getElementById('tools-toggle-btn').classList.toggle('active',toolsOpen);
+}
+
+function quickTool(prompt){
+  toggleTools();
+  document.getElementById('inp').value=prompt;
+  autoResize(document.getElementById('inp'));
+  send();
+}
+
+// ══════════════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════════════
+function exportChat(){
+  const c=convos[activeId];if(!c)return;
+  const lines=[`# Nexus — ${c.title}`,`Exported: ${new Date().toLocaleString()}`,`Mode: ${MODELABELS[c.mode]||'AUTO'}`,`Messages: ${c.messages.length}`,'',`---`,``];
+  for(const m of c.messages){
+    if(m.thinking)continue;
+    lines.push(`**${m.role==='user'?'You':'Nexus'}:**`);
+    lines.push(m.content);
+    if(m.files?.length)lines.push(`*Files: ${m.files.join(', ')}*`);
+    lines.push('');
+  }
+  const blob=new Blob([lines.join('\n')],{type:'text/markdown'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`nexus-${c.title.substring(0,30).replace(/[^a-z0-9]/gi,'-').toLowerCase()}.md`;
+  a.click();
+}
+
+function clearChat(){
+  if(!activeId)return;
+  if(!confirm('Clear this conversation? This cannot be undone.'))return;
+  convos[activeId].messages=[];
+  save();showWelcome();
+  setTopbar('New Session','Ready to assist');
+  document.getElementById('ctx-pill').style.display='none';
+  document.getElementById('export-btn').style.display='none';
+  document.getElementById('clear-btn').style.display='none';
+}
+
+// ══════════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════════
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,160)+'px';}
+function starter(t){document.getElementById('inp').value=t;autoResize(document.getElementById('inp'));send();}
+
+// Greeting
+function greeting(){const h=new Date().getHours();return h<12?'Good morning':h<17?'Good afternoon':'Good evening';}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+load();
+setTopbar(greeting(),'Ready to assist');
+updateModeIndicator('auto');
+
+// Handle URL params (?new=1 or ?mode=business)
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get('new')==='1'){
+  newConvo();
+} else if(urlParams.get('mode')){
+  const m=urlParams.get('mode');
+  if(['business','legal','math','literature','strategy'].includes(m)){setMode(m);}
+  if(!activeId||!Object.keys(convos).length){newConvo();}
+  else{renderList();switchConvo(activeId);}
+} else {
+  if(!activeId||!Object.keys(convos).length){newConvo();}
+  else{renderList();switchConvo(activeId);}
+}
+document.getElementById('inp').focus();
+
+// ═══ SERVICE WORKER ═══
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(reg=>console.log('Nexus SW registered',reg.scope))
+      .catch(err=>console.log('SW registration failed',err));
+  });
+}
+
+// ═══ PWA INSTALL PROMPT ═══
+let deferredPrompt=null;
+const installBanner=document.createElement('div');
+installBanner.id='install-banner';
+installBanner.style.cssText=`
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:#0a0a0a;border:1px solid rgba(196,160,82,0.35);
+  border-radius:14px;padding:14px 20px;
+  display:none;align-items:center;gap:14px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.3);z-index:9999;
+  font-family:'Outfit',sans-serif;animation:rise 0.4s ease;
+  max-width:340px;width:calc(100% - 40px);
+`;
+installBanner.innerHTML=`
+  <div style="width:38px;height:38px;border-radius:9px;background:linear-gradient(145deg,#f7f3ec,#c4a052);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#0a0a0a;flex-shrink:0;">N</div>
+  <div style="flex:1;">
+    <div style="font-size:13px;font-weight:600;color:#f7f3ec;margin-bottom:2px;">Install Nexus</div>
+    <div style="font-size:11px;color:rgba(247,243,236,0.45);">Add to home screen for the full app experience</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;">
+    <button id="install-yes" style="padding:6px 14px;border-radius:8px;background:linear-gradient(135deg,#c4a052,#9a7c3a);border:none;color:#0a0a0a;font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;">Install</button>
+    <button id="install-no" style="padding:5px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:rgba(247,243,236,0.5);font-size:11px;cursor:pointer;font-family:'Outfit',sans-serif;">Later</button>
+  </div>`;
+document.body.appendChild(installBanner);
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  // Show after 3 seconds
+  setTimeout(()=>{ installBanner.style.display='flex'; },3000);
+});
+
+document.getElementById('install-yes').addEventListener('click',async()=>{
+  installBanner.style.display='none';
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const{outcome}=await deferredPrompt.userChoice;
+    console.log('Install outcome:',outcome);
+    deferredPrompt=null;
+  }
+});
+
+document.getElementById('install-no').addEventListener('click',()=>{
+  installBanner.style.display='none';
+  // Don't show again for 7 days
+  localStorage.setItem('nx_install_dismissed', Date.now());
+});
+
+// Check if already installed
+window.addEventListener('appinstalled',()=>{
+  installBanner.style.display='none';
+  deferredPrompt=null;
+  console.log('Nexus installed!');
+});
+
+// Hide banner if dismissed recently
+const dismissed=localStorage.getItem('nx_install_dismissed');
+if(dismissed && Date.now()-parseInt(dismissed) < 7*24*60*60*1000){
+  // Don't show
+  window.removeEventListener('beforeinstallprompt',()=>{});
+}
+</script>
+</body>
+</html>
